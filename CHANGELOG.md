@@ -30,6 +30,7 @@ All notable changes to Career Pilot are documented here. The format follows [Kee
 - Dashboard dates and update times are generated from the current locale instead of hard-coded sample timestamps.
 - Resume upload now continues directly into the coaching conversation after profile analysis.
 - Replaced the Cloudflare production Launch with an explicitly labeled GitHub Pages demo. Server-only scanning and AI endpoints are disabled in the static build while browser-local demo features remain interactive.
+- Updated the GitHub Pages actions to their Node.js 24 releases (`configure-pages@v6`, `upload-pages-artifact@v5`, and `deploy-pages@v5`) and documented the one-time Pages enablement required before the first run.
 
 ### Fixed
 

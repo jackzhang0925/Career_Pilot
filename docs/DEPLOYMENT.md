@@ -15,6 +15,8 @@
 3. 打开 **Actions → Launch GitHub Pages Demo → Run workflow**，或推送到 `main`。
 4. 成功后访问 `https://jackzhang0925.github.io/Career_Pilot/`。
 
+如果 `Configure GitHub Pages` 返回 `Get Pages site failed: Not Found`，表示第 2 步尚未完成。不要给 workflow 添加个人访问 Token，也不要设置 `enablement: true`；在仓库设置中启用 Pages 后重新运行失败任务即可。
+
 之后每次推送或合并到 `main` 都会重新验证并更新免费 Demo。工作流使用 GitHub 官方 Pages Actions，不需要 Cloudflare secrets。
 
 Pages 只托管静态文件，因此不会运行 `/api/scan-jobs`、`/api/career-coach`、`/api/analyze-resume` 或 `/api/openai-key`。Demo 会保留演示数据以及所有浏览器本地功能，并明确显示 `GITHUB PAGES DEMO`，避免把静态数据说成实时结果。
