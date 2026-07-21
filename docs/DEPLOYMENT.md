@@ -8,21 +8,22 @@
 
 推荐在 GitHub 的 `main` branch protection 中启用：要求 Pull Request、至少 1 个 approval、`Lint, build, and test` 状态检查、分支保持最新，并禁止 force push 与删除。
 
-## 首次 Launch 配置
+## 免费 GitHub Pages Demo
 
-1. 在 Cloudflare 创建仅具备目标 Worker 发布权限的 API Token。
-2. 在 GitHub 打开 **Settings → Environments**，创建 `production`。
-3. 添加 Environment secrets：`CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`。
-4. 建议添加 required reviewer，避免未经确认的生产发布。
-5. 打开 **Actions → Launch → Run workflow** 完成首次发布。
+1. 在 GitHub 打开 **Settings → Pages**。
+2. 在 **Build and deployment → Source** 选择 **GitHub Actions**。
+3. 打开 **Actions → Launch GitHub Pages Demo → Run workflow**，或推送到 `main`。
+4. 成功后访问 `https://jackzhang0925.github.io/Career_Pilot/`。
 
-之后每次推送或合并到 `main` 都会在重新验证后发布，也可从 Actions 手动 Launch。工作流发布生成的 Cloudflare Worker，并保留控制台已有运行时变量。
+之后每次推送或合并到 `main` 都会重新验证并更新免费 Demo。工作流使用 GitHub 官方 Pages Actions，不需要 Cloudflare secrets。
+
+Pages 只托管静态文件，因此不会运行 `/api/scan-jobs`、`/api/career-coach`、`/api/analyze-resume` 或 `/api/openai-key`。Demo 会保留演示数据以及所有浏览器本地功能，并明确显示 `GITHUB PAGES DEMO`，避免把静态数据说成实时结果。
 
 ## Secrets 与运行时配置
 
 - 不要提交 `.env.local`、`.dev.vars`、API key、简历或 LinkedIn 会话数据。
 - Pull Request 工作流没有生产部署凭据。
-- 生产 `OPENAI_API_KEY` 应在 Cloudflare Worker secrets 中配置。
+- GitHub Pages Demo 不接受或保存生产 `OPENAI_API_KEY`；AI 服务端模式仅在本地或未来的动态托管版本中启用。
 - LinkedIn 密码和 Cookie 不属于部署配置，应用不会读取它们。
 
 ## 本地发布前检查

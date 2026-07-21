@@ -11637,7 +11637,7 @@ var client_references_default = {
 		} };
 	},
 	"29b5d3f650f6": async () => {
-		const m = await import("./assets/career-dashboard-BCI1Vrv4.js");
+		const m = await import("./assets/career-dashboard-CZsClTPL.js");
 		return { get "CareerDashboard"() {
 			return m["CareerDashboard"];
 		} };

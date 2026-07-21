@@ -35,6 +35,7 @@ button { cursor:pointer; }
 .search input { flex:1; border:0; outline:0; background:transparent; color:#333; font-size:12px; }
 .search kbd { border:1px solid #dfddd8; border-bottom-width:2px; border-radius:5px; background:#f7f6f3; color:#9a9893; padding:3px 7px; font:10px var(--font-geist-mono),monospace; }
 .top-actions { display:flex; align-items:center; gap:8px; }
+.demo-badge { padding:6px 8px; border:1px solid #d8d4f0; border-radius:7px; background:#f4f1ff; color:#685ab7; font:700 7px/1 var(--font-geist-mono),monospace; letter-spacing:.08em; white-space:nowrap; }
 .top-actions>button:not(.scan-button) { width:36px; height:36px; border:1px solid var(--line); color:#72736f; background:#fff; border-radius:9px; display:grid; place-items:center; position:relative; }
 .notification i { position:absolute; right:8px; top:7px; width:5px; height:5px; border-radius:50%; background:var(--coral); box-shadow:0 0 0 2px #fff; }
 .scan-button,.radar-card>button,.primary { border:0; background:#202126; color:#fff; border-radius:9px; padding:10px 15px; display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; box-shadow:0 5px 14px #17181b20; }

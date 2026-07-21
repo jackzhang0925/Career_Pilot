@@ -14,7 +14,7 @@ All notable changes to Career Pilot are documented here. The format follows [Kee
 - A living 12-week learning roadmap with measurable outcomes and a practical portfolio project for every stage; AI responses can refine it as the target changes.
 - A local coaching fallback when no OpenAI key is configured, so career exploration and the starter roadmap remain available.
 - GitHub Actions CI for collaborator branches and pull requests, including locked dependency installation, linting, production build, and rendered HTML tests.
-- A protected `Launch` workflow that can be started from GitHub Actions or triggered by a push to `main` after Cloudflare production secrets are configured.
+- A free static GitHub Pages demo build and deployment workflow that requires no Cloudflare account, API token, or paid hosting.
 - A pull-request checklist and default code ownership for safer collaborative development.
 - Working score filters, company/match sorting, notification feedback, help navigation, and status restoration for controls that previously had no behavior.
 - A dedicated local API testing window with masked key input, model validation, one-click career-coach testing, and session-key removal.
@@ -29,6 +29,7 @@ All notable changes to Career Pilot are documented here. The format follows [Kee
 - Source counts in the interface now match the adapters that are actually implemented.
 - Dashboard dates and update times are generated from the current locale instead of hard-coded sample timestamps.
 - Resume upload now continues directly into the coaching conversation after profile analysis.
+- Replaced the Cloudflare production Launch with an explicitly labeled GitHub Pages demo. Server-only scanning and AI endpoints are disabled in the static build while browser-local demo features remain interactive.
 
 ### Fixed
 
@@ -46,7 +47,7 @@ All notable changes to Career Pilot are documented here. The format follows [Kee
 
 ### Security
 
-- Deployment credentials are read only from the protected GitHub `production` environment and are never exposed to pull-request jobs.
+- The public Demo has no deployment credentials or server-side API keys; GitHub’s short-lived Pages deployment identity is limited to the workflow’s `pages: write` and `id-token: write` permissions.
 - Temporary user-supplied OpenAI keys can only be set or removed from loopback hosts, preventing the session-key endpoint from becoming a shared production credential surface.
 - LinkedIn passwords and cookies remain outside the application. The app does not scrape, screenshot, or automate signed-in LinkedIn pages; job scoring only uses content the user explicitly imports.
 - Career coaching prompts prohibit invented resume facts, sensitive-attribute inference, and guaranteed employment outcomes.

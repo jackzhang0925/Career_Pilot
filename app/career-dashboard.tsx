@@ -60,6 +60,7 @@ type LinkedInConfig = { enabled: boolean; keywords: string; location: string; wo
 type LinkedInImport = { company: string; role: string; location: string; url: string; description: string };
 const defaultIdentity: UserIdentity = { name: "Jack Zhang", location: "Toronto", focus: "Product Design" };
 const defaultLinkedIn: LinkedInConfig = { enabled: false, keywords: "", location: "Toronto, Canada", workplace: "hybrid-remote", datePosted: "day", experience: ["4", "5"], employment: "F", easyApply: false, mostRecent: true };
+const isStaticDemo = import.meta.env.VITE_STATIC_DEMO === "true";
 
 function linkedInSearchUrl(config: LinkedInConfig) {
   const params = new URLSearchParams();
@@ -205,7 +206,7 @@ export function CareerDashboard() {
   }
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || isStaticDemo) return;
     void scanForProfile(currentProfile, false, true);
     const refresh = () => { if (document.visibilityState === "visible") void scanForProfile(currentProfile, false, true); };
     const timer = window.setInterval(refresh, 5 * 60 * 1000);
@@ -274,7 +275,7 @@ export function CareerDashboard() {
       <main className="main">
         <header className="topbar">
           <div className="search"><Search size={18} /><input aria-label="搜索职位" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="搜索职位、公司或技能…" /><kbd>⌘ K</kbd></div>
-          <div className="top-actions"><button aria-label="帮助" onClick={() => setActive("coach")}><CircleHelp size={19} /></button><button aria-label="通知" className="notification" onClick={() => { setNotice(scanStats.failures.length ? `${scanStats.failures.length} 个职位来源暂时不可用，健康来源仍已更新。` : "没有新的系统通知，职位数据会在页面可见时自动刷新。"); window.setTimeout(() => setNotice(null), 3200); }}><Bell size={19} />{scanStats.failures.length > 0 && <i />}</button><button className="api-test-button" aria-label="本地 API 测试" title="本地 API 测试" onClick={() => setShowApiTest(true)}><KeyRound size={18} /></button><button className="scan-button" onClick={runScan} disabled={running}><Play size={16} fill="currentColor" />{running ? "正在扫描…" : "立即扫描"}</button></div>
+          <div className="top-actions">{isStaticDemo && <span className="demo-badge">GITHUB PAGES DEMO</span>}<button aria-label="帮助" onClick={() => setActive("coach")}><CircleHelp size={19} /></button><button aria-label="通知" className="notification" onClick={() => { setNotice(scanStats.failures.length ? `${scanStats.failures.length} 个职位来源暂时不可用，健康来源仍已更新。` : isStaticDemo ? "这是免费的静态演示版；实时公开职位扫描只在本地或服务端版本中运行。" : "没有新的系统通知，职位数据会在页面可见时自动刷新。"); window.setTimeout(() => setNotice(null), 3200); }}><Bell size={19} />{scanStats.failures.length > 0 && <i />}</button><button className="api-test-button" aria-label="本地 API 测试" title="本地 API 测试" onClick={() => setShowApiTest(true)}><KeyRound size={18} /></button><button className="scan-button" onClick={runScan} disabled={running || isStaticDemo} title={isStaticDemo ? "静态 Demo 不运行服务端职位扫描" : undefined}><Play size={16} fill="currentColor" />{isStaticDemo ? "演示数据" : running ? "正在扫描…" : "立即扫描"}</button></div>
         </header>
 
         {active === "overview" || active === "jobs" || active === "queue" ? (

@@ -2,6 +2,7 @@ node_modules
 .next
 .vinext
 .wrangler
+dist-pages
 .dev.vars
 .env
 .env.*

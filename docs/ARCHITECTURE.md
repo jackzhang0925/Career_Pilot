@@ -45,8 +45,8 @@ LinkedIn 不属于自动抓取适配器。应用构造并在 Dashboard 展示已
 
 ## 交付流水线
 
-协作分支与 Pull Request 使用 GitHub Actions 执行 `npm ci` 和 `npm run check`。生产 Launch 在相同校验通过后，由受保护的 GitHub `production` Environment 向 Cloudflare Worker 发布构建产物。部署凭据只存在于 Environment secrets，不进入仓库或 PR 工作流。
+协作分支与 Pull Request 使用 GitHub Actions 执行 `npm ci` 和 `npm run check`。`main` 或手动 Launch 会额外构建纯静态 Demo，通过 GitHub 官方 Pages artifact 与 deployment Actions 免费发布。静态构建设置 `VITE_STATIC_DEMO=true`，跳过后台实时扫描并明确标记演示状态；无需部署凭据。
 
 ## 本地 API Key 边界
 
-用户通过本地测试窗口提交的 OpenAI Key 会先调用模型读取接口验证权限，随后只保存在当前服务进程的内存中。设置和移除临时 Key 的接口拒绝非 loopback 主机请求；浏览器存储、Cookie、日志和仓库均不保存 Key。生产环境应使用 Cloudflare secrets，而不是临时 Key 窗口。
+用户通过本地测试窗口提交的 OpenAI Key 会先调用模型读取接口验证权限，随后只保存在当前服务进程的内存中。设置和移除临时 Key 的接口拒绝非 loopback 主机请求；浏览器存储、Cookie、日志和仓库均不保存 Key。GitHub Pages Demo 不运行该服务端接口，也不接收 API Key。

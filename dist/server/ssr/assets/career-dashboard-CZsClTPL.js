@@ -692,6 +692,7 @@ var defaultLinkedIn = {
 	easyApply: false,
 	mostRecent: true
 };
+var isStaticDemo = false;
 function linkedInSearchUrl(config) {
 	const params = new URLSearchParams();
 	if (config.keywords.trim()) params.set("keywords", config.keywords.trim());
@@ -1034,7 +1035,7 @@ function CareerDashboard() {
 		}
 	}
 	(0, import_react.useEffect)(() => {
-		if (!hydrated) return;
+		if (!hydrated || isStaticDemo) return;
 		scanForProfile(currentProfile, false, true);
 		const refresh = () => {
 			if (document.visibilityState === "visible") scanForProfile(currentProfile, false, true);
@@ -1158,6 +1159,7 @@ function CareerDashboard() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "top-actions",
 						children: [
+							isStaticDemo,
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								"aria-label": "帮助",
 								onClick: () => setActive("coach"),
@@ -1182,7 +1184,8 @@ function CareerDashboard() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								className: "scan-button",
 								onClick: runScan,
-								disabled: running,
+								disabled: running || isStaticDemo,
+								title: void 0,
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, {
 									size: 16,
 									fill: "currentColor"
