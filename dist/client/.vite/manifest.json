@@ -1,0 +1,79 @@
+{
+  "_framework-BOexRV2D.js": {
+    "file": "assets/framework-BOexRV2D.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-BM3Ffeng.js"
+    ]
+  },
+  "_rolldown-runtime-BM3Ffeng.js": {
+    "file": "assets/rolldown-runtime-BM3Ffeng.js",
+    "name": "rolldown-runtime"
+  },
+  "app/career-dashboard.tsx": {
+    "file": "assets/career-dashboard-D4Cgzp3P.js",
+    "name": "career-dashboard",
+    "src": "app/career-dashboard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-BM3Ffeng.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-BOexRV2D.js"
+    ],
+    "dynamicImports": [
+      "node_modules/mammoth/lib/index.js",
+      "node_modules/pdfjs-dist/build/pdf.mjs"
+    ],
+    "assets": [
+      "assets/pdf.worker.min-FHbmGBN0.mjs"
+    ]
+  },
+  "node_modules/mammoth/lib/index.js": {
+    "file": "assets/lib-B3X-f5Gv.js",
+    "name": "lib",
+    "src": "node_modules/mammoth/lib/index.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-BM3Ffeng.js"
+    ]
+  },
+  "node_modules/pdfjs-dist/build/pdf.mjs": {
+    "file": "assets/pdf-aeABD3_h.js",
+    "name": "pdf",
+    "src": "node_modules/pdfjs-dist/build/pdf.mjs",
+    "isDynamicEntry": true,
+    "imports": [
+      "virtual:vinext-app-browser-entry"
+    ]
+  },
+  "node_modules/pdfjs-dist/build/pdf.worker.min.mjs": {
+    "file": "assets/pdf.worker.min-FHbmGBN0.mjs",
+    "src": "node_modules/pdfjs-dist/build/pdf.worker.min.mjs"
+  },
+  "node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "assets/layout-segment-context-va_7iDxG.js",
+    "name": "layout-segment-context",
+    "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-BM3Ffeng.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-BOexRV2D.js"
+    ]
+  },
+  "virtual:vinext-app-browser-entry": {
+    "file": "assets/index-C2f1RLwC.js",
+    "name": "index",
+    "src": "virtual:vinext-app-browser-entry",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-BM3Ffeng.js",
+      "_framework-BOexRV2D.js"
+    ],
+    "dynamicImports": [
+      "node_modules/vinext/dist/shims/layout-segment-context.js",
+      "app/career-dashboard.tsx",
+      "virtual:vinext-app-browser-entry"
+    ]
+  }
+}
