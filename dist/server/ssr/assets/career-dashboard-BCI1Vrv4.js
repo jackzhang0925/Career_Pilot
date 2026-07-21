@@ -323,6 +323,22 @@ var Inbox = createLucideIcon("inbox", [["polyline", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var KeyRound = createLucideIcon("key-round", [["path", {
+	d: "M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z",
+	key: "1s6t7t"
+}], ["circle", {
+	cx: "16.5",
+	cy: "7.5",
+	r: ".5",
+	fill: "currentColor",
+	key: "w0ekpg"
+}]]);
+/**
+* @license lucide-react v1.25.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var LayoutDashboard = createLucideIcon("layout-dashboard", [
 	["rect", {
 		width: "7",
@@ -406,6 +422,16 @@ var MapPin = createLucideIcon("map-pin", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var MessageCircle = createLucideIcon("message-circle", [["path", {
+	d: "M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719",
+	key: "1sd12s"
+}]]);
+/**
+* @license lucide-react v1.25.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Ellipsis = createLucideIcon("ellipsis", [
 	["circle", {
 		cx: "12",
@@ -442,6 +468,30 @@ var Play = createLucideIcon("play", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Route = createLucideIcon("route", [
+	["circle", {
+		cx: "6",
+		cy: "19",
+		r: "3",
+		key: "1kj8tv"
+	}],
+	["path", {
+		d: "M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15",
+		key: "1d8sl"
+	}],
+	["circle", {
+		cx: "18",
+		cy: "5",
+		r: "3",
+		key: "gq8acd"
+	}]
+]);
+/**
+* @license lucide-react v1.25.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Search = createLucideIcon("search", [["path", {
 	d: "m21 21-4.34-4.34",
 	key: "14j7rj"
@@ -450,6 +500,19 @@ var Search = createLucideIcon("search", [["path", {
 	cy: "11",
 	r: "8",
 	key: "4ej97u"
+}]]);
+/**
+* @license lucide-react v1.25.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Send = createLucideIcon("send", [["path", {
+	d: "M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z",
+	key: "1ffxy3"
+}], ["path", {
+	d: "m21.854 2.147-10.94 10.939",
+	key: "12cjpa"
 }]]);
 /**
 * @license lucide-react v1.25.0 - ISC
@@ -618,6 +681,34 @@ var defaultIdentity = {
 	location: "Toronto",
 	focus: "Product Design"
 };
+var defaultLinkedIn = {
+	enabled: false,
+	keywords: "",
+	location: "Toronto, Canada",
+	workplace: "hybrid-remote",
+	datePosted: "day",
+	experience: ["4", "5"],
+	employment: "F",
+	easyApply: false,
+	mostRecent: true
+};
+function linkedInSearchUrl(config) {
+	const params = new URLSearchParams();
+	if (config.keywords.trim()) params.set("keywords", config.keywords.trim());
+	if (config.location.trim()) params.set("location", config.location.trim());
+	if (config.datePosted === "day") params.set("f_TPR", "r86400");
+	if (config.datePosted === "week") params.set("f_TPR", "r604800");
+	if (config.datePosted === "month") params.set("f_TPR", "r2592000");
+	if (config.workplace === "remote") params.set("f_WT", "2");
+	if (config.workplace === "hybrid") params.set("f_WT", "3");
+	if (config.workplace === "onsite") params.set("f_WT", "1");
+	if (config.workplace === "hybrid-remote") params.set("f_WT", "2,3");
+	if (config.experience.length) params.set("f_E", config.experience.join(","));
+	if (config.employment) params.set("f_JT", config.employment);
+	if (config.easyApply) params.set("f_AL", "true");
+	if (config.mostRecent) params.set("sortBy", "DD");
+	return `https://www.linkedin.com/jobs/search/?${params.toString()}`;
+}
 var seedJobs = [
 	{
 		id: 1,
@@ -761,6 +852,11 @@ var nav = [
 		count: 6
 	},
 	{
+		id: "coach",
+		label: "职业教练",
+		icon: MessageCircle
+	},
+	{
 		id: "materials",
 		label: "材料库",
 		icon: FileText
@@ -776,9 +872,16 @@ function CareerDashboard() {
 	const [currentProfile, setCurrentProfile] = (0, import_react.useState)(defaultProfile);
 	const [scanStats, setScanStats] = (0, import_react.useState)({
 		scanned: seedJobs.length,
-		sources: 6
+		sources: 0,
+		fetchedAt: null,
+		failures: [],
+		isDemo: true
 	});
 	const [identity, setIdentity] = (0, import_react.useState)(defaultIdentity);
+	const [hydrated, setHydrated] = (0, import_react.useState)(false);
+	const [showApiTest, setShowApiTest] = (0, import_react.useState)(false);
+	const [linkedInConfig, setLinkedInConfig] = (0, import_react.useState)(defaultLinkedIn);
+	const scanRequest = (0, import_react.useRef)(null);
 	(0, import_react.useEffect)(() => {
 		const saved = localStorage.getItem("cat-career-jobs");
 		if (saved) try {
@@ -791,7 +894,14 @@ function CareerDashboard() {
 		}
 		const savedScanStats = localStorage.getItem("cat-career-scan-stats");
 		if (savedScanStats) try {
-			setScanStats(JSON.parse(savedScanStats));
+			setScanStats({
+				scanned: seedJobs.length,
+				sources: 0,
+				fetchedAt: null,
+				failures: [],
+				isDemo: true,
+				...JSON.parse(savedScanStats)
+			});
 		} catch {
 			localStorage.removeItem("cat-career-scan-stats");
 		}
@@ -813,10 +923,20 @@ function CareerDashboard() {
 		} catch {
 			localStorage.removeItem("cat-career-identity");
 		}
+		const savedLinkedIn = localStorage.getItem("cat-career-linkedin");
+		if (savedLinkedIn) try {
+			setLinkedInConfig({
+				...defaultLinkedIn,
+				...JSON.parse(savedLinkedIn)
+			});
+		} catch {
+			localStorage.removeItem("cat-career-linkedin");
+		}
+		setHydrated(true);
 	}, []);
 	(0, import_react.useEffect)(() => {
-		localStorage.setItem("cat-career-jobs", JSON.stringify(jobs));
-	}, [jobs]);
+		if (hydrated) localStorage.setItem("cat-career-jobs", JSON.stringify(jobs));
+	}, [hydrated, jobs]);
 	const visibleJobs = (0, import_react.useMemo)(() => jobs.filter((job) => `${job.company} ${job.role} ${job.tags.join(" ")}`.toLowerCase().includes(query.toLowerCase())), [jobs, query]);
 	function updateStatus(id, status) {
 		setJobs((current) => current.map((job) => job.id === id ? {
@@ -827,24 +947,61 @@ function CareerDashboard() {
 			...current,
 			status
 		} : current);
-		setNotice(status === "已加入" ? "已加入申请队列，最终提交前仍需你确认。" : "已从今日推荐中跳过。");
+		setNotice(status === "已加入" ? "已加入申请队列，最终提交前仍需你确认。" : status === "已跳过" ? "已从今日推荐中跳过。" : "已恢复为待确认状态。");
 		window.setTimeout(() => setNotice(null), 2600);
 	}
-	async function scanForProfile(profile, profileChanged = false) {
+	async function scanForProfile(profile, profileChanged = false, silent = false) {
+		scanRequest.current?.controller.abort();
+		const request = {
+			id: (scanRequest.current?.id || 0) + 1,
+			controller: new AbortController()
+		};
+		scanRequest.current = request;
 		setRunning(true);
 		if (profileChanged) {
-			setJobs((current) => current.filter((job) => job.status === "已加入"));
+			setJobs((current) => current.filter((job) => job.status === "已加入" || job.source === "LinkedIn · 用户导入").map((job) => {
+				if (job.source !== "LinkedIn · 用户导入" || !job.description) return job;
+				return {
+					...buildImportedLinkedInJob({
+						company: job.company,
+						role: job.role,
+						location: job.location,
+						url: job.url,
+						description: job.description
+					}, profile),
+					id: job.id,
+					status: job.status
+				};
+			}));
 			setActive("overview");
 			setNotice("新画像已保存，正在重新扫描真实职位…");
 		}
 		try {
+			const savedSources = localStorage.getItem("cat-career-sources");
+			let sources = [
+				"Greenhouse",
+				"Lever",
+				"Ashby"
+			];
+			if (savedSources) try {
+				const enabled = JSON.parse(savedSources);
+				sources = sources.filter((source) => enabled[source] !== false);
+			} catch {
+				localStorage.removeItem("cat-career-sources");
+			}
 			const response = await fetch("/api/scan-jobs", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(profile)
+				body: JSON.stringify({
+					...profile,
+					sources
+				}),
+				signal: request.controller.signal,
+				cache: "no-store"
 			});
-			if (!response.ok) throw new Error("scan-failed");
 			const result = await response.json();
+			if (!response.ok || !result.jobs) throw new Error(result.error || "职位扫描失败");
+			if (scanRequest.current?.id !== request.id) return;
 			setJobs((current) => {
 				const currentByUrl = new Map(current.map((job) => [job.url, job]));
 				const refreshed = result.jobs.map((job) => ({
@@ -852,23 +1009,44 @@ function CareerDashboard() {
 					status: currentByUrl.get(job.url)?.status || job.status
 				}));
 				const returnedUrls = new Set(refreshed.map((job) => job.url));
-				const preservedQueue = current.filter((job) => job.status === "已加入" && !returnedUrls.has(job.url));
-				return [...refreshed, ...preservedQueue];
+				const preservedLocal = current.filter((job) => (job.status === "已加入" || job.source === "LinkedIn · 用户导入") && !returnedUrls.has(job.url));
+				return [...refreshed, ...preservedLocal];
 			});
+			setSelected((current) => current ? result.jobs.find((job) => job.url === current.url) || current : null);
 			const nextStats = {
-				scanned: result.scanned,
-				sources: result.sources
+				scanned: result.scanned || 0,
+				sources: result.sources || 0,
+				fetchedAt: result.fetchedAt || (/* @__PURE__ */ new Date()).toISOString(),
+				failures: result.failures || [],
+				isDemo: false
 			};
 			setScanStats(nextStats);
 			localStorage.setItem("cat-career-scan-stats", JSON.stringify(nextStats));
-			setNotice(`扫描完成：从 ${result.sources} 个公开职位板读取 ${result.scanned} 个岗位，并按新画像重新排序。`);
-		} catch {
-			setNotice(profileChanged ? "旧推荐已失效，但职位扫描暂时不可用。请稍后重试。" : "职位扫描暂时不可用，请稍后重试。");
+			if (!silent) setNotice(`刷新完成：从 ${nextStats.sources} 个公开职位板读取 ${nextStats.scanned} 个岗位${nextStats.failures.length ? `；${nextStats.failures.length} 个来源暂时不可用` : ""}。`);
+		} catch (error) {
+			if (error instanceof DOMException && error.name === "AbortError") return;
+			if (!silent) setNotice(profileChanged ? "旧推荐已失效，但实时职位刷新暂时不可用。请稍后重试。" : error instanceof Error ? error.message : "职位刷新暂时不可用，请稍后重试。");
 		} finally {
-			setRunning(false);
-			window.setTimeout(() => setNotice(null), 3200);
+			if (scanRequest.current?.id === request.id) {
+				setRunning(false);
+				if (!silent) window.setTimeout(() => setNotice(null), 3200);
+			}
 		}
 	}
+	(0, import_react.useEffect)(() => {
+		if (!hydrated) return;
+		scanForProfile(currentProfile, false, true);
+		const refresh = () => {
+			if (document.visibilityState === "visible") scanForProfile(currentProfile, false, true);
+		};
+		const timer = window.setInterval(refresh, 300 * 1e3);
+		document.addEventListener("visibilitychange", refresh);
+		return () => {
+			window.clearInterval(timer);
+			document.removeEventListener("visibilitychange", refresh);
+			scanRequest.current?.controller.abort();
+		};
+	}, [hydrated]);
 	function runScan() {
 		scanForProfile(currentProfile);
 	}
@@ -879,6 +1057,19 @@ function CareerDashboard() {
 	function updateIdentity(next) {
 		setIdentity(next);
 		localStorage.setItem("cat-career-identity", JSON.stringify(next));
+	}
+	function importLinkedInJob(input) {
+		const job = buildImportedLinkedInJob(input, currentProfile);
+		setJobs((current) => [job, ...current.filter((existing) => existing.url !== job.url)]);
+		setActive("jobs");
+		setNotice(`已导入并评分：${job.company} · ${job.role}（${job.score} 分）`);
+		window.setTimeout(() => setNotice(null), 3600);
+	}
+	function removeImportedJob(id) {
+		setJobs((current) => current.filter((job) => job.id !== id));
+		setSelected(null);
+		setNotice("已从本地职位池移除用户导入的 LinkedIn 职位。");
+		window.setTimeout(() => setNotice(null), 2800);
 	}
 	const queued = jobs.filter((job) => job.status === "已加入").length;
 	const reviewed = jobs.filter((job) => job.status === "已加入" || job.status === "已跳过").length;
@@ -909,7 +1100,7 @@ function CareerDashboard() {
 										strokeWidth: 1.8
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: label }),
-									count && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: id === "queue" ? queued : count })
+									count && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: id === "queue" ? queued : id === "jobs" ? jobs.length : count })
 								]
 							}, id)),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "个人设置" }),
@@ -969,12 +1160,24 @@ function CareerDashboard() {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								"aria-label": "帮助",
+								onClick: () => setActive("coach"),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleQuestionMark, { size: 19 })
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								"aria-label": "通知",
 								className: "notification",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { size: 19 }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {})]
+								onClick: () => {
+									setNotice(scanStats.failures.length ? `${scanStats.failures.length} 个职位来源暂时不可用，健康来源仍已更新。` : "没有新的系统通知，职位数据会在页面可见时自动刷新。");
+									window.setTimeout(() => setNotice(null), 3200);
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { size: 19 }), scanStats.failures.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "api-test-button",
+								"aria-label": "本地 API 测试",
+								title: "本地 API 测试",
+								onClick: () => setShowApiTest(true),
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KeyRound, { size: 18 })
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								className: "scan-button",
@@ -994,16 +1197,25 @@ function CareerDashboard() {
 					active,
 					running,
 					scanStats,
+					linkedIn: linkedInConfig,
 					userName: identity.name,
 					setSelected,
 					updateStatus,
 					runScan,
-					onViewAll: () => setActive("jobs")
-				}) : active === "profile" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfilePanel, { onProfileChanged: handleProfileChanged }) : active === "materials" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MaterialsPanel, {
+					onViewAll: () => setActive("jobs"),
+					onOpenSources: () => setActive("sources")
+				}) : active === "profile" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfilePanel, {
+					onProfileChanged: handleProfileChanged,
+					onOpenCoach: () => setActive("coach")
+				}) : active === "coach" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CareerCoachPanel, { onOpenProfile: () => setActive("profile") }) : active === "materials" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MaterialsPanel, {
 					jobs,
 					onOpenProfile: () => setActive("profile"),
 					onOpenQueue: () => setActive("queue")
-				}) : active === "sources" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SourcesPanel, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AutomationPanel, {
+				}) : active === "sources" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SourcesPanel, {
+					onRefresh: runScan,
+					onLinkedInChange: setLinkedInConfig,
+					onLinkedInImport: importLinkedInJob
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AutomationPanel, {
 					identity,
 					onIdentityChange: updateIdentity
 				})]
@@ -1011,7 +1223,15 @@ function CareerDashboard() {
 			selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(JobDrawer, {
 				job: selected,
 				onClose: () => setSelected(null),
-				onStatus: updateStatus
+				onStatus: updateStatus,
+				onRemoveImported: removeImportedJob
+			}),
+			showApiTest && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LocalApiKeyDialog, {
+				onClose: () => setShowApiTest(false),
+				onOpenCoach: () => {
+					setShowApiTest(false);
+					setActive("coach");
+				}
 			}),
 			notice && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "toast",
@@ -1020,9 +1240,147 @@ function CareerDashboard() {
 		]
 	});
 }
-function DashboardContent({ jobs, queued, reviewed, active, running, scanStats, userName, setSelected, updateStatus, runScan, onViewAll }) {
+function LocalApiKeyDialog({ onClose, onOpenCoach }) {
+	const [apiKey, setApiKey] = (0, import_react.useState)("");
+	const [model, setModel] = (0, import_react.useState)("gpt-5.6-sol");
+	const [configured, setConfigured] = (0, import_react.useState)(false);
+	const [localRequest, setLocalRequest] = (0, import_react.useState)(true);
+	const [state, setState] = (0, import_react.useState)("idle");
+	const [message, setMessage] = (0, import_react.useState)("");
+	(0, import_react.useEffect)(() => {
+		fetch("/api/openai-key", { cache: "no-store" }).then((response) => response.json()).then((result) => {
+			setConfigured(Boolean(result.configured));
+			setLocalRequest(Boolean(result.localRequest));
+			if (result.model) setModel(result.model);
+		}).catch(() => {
+			setState("error");
+			setMessage("无法读取本地 API 状态。");
+		});
+		const closeOnEscape = (event) => {
+			if (event.key === "Escape") onClose();
+		};
+		window.addEventListener("keydown", closeOnEscape);
+		return () => window.removeEventListener("keydown", closeOnEscape);
+	}, [onClose]);
+	async function validateKey() {
+		if (!apiKey.trim()) {
+			setState("error");
+			setMessage("请输入 API Key。");
+			return;
+		}
+		setState("checking");
+		setMessage("正在验证 Key 与模型权限…");
+		try {
+			const response = await fetch("/api/openai-key", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					apiKey: apiKey.trim(),
+					model: model.trim()
+				})
+			});
+			const result = await response.json();
+			if (!response.ok || !result.valid) throw new Error(result.error || "验证失败。");
+			setApiKey("");
+			setConfigured(true);
+			setState("ready");
+			setMessage(`验证成功，${result.model || model} 已可用于当前本地服务会话。`);
+		} catch (error) {
+			setState("error");
+			setMessage(error instanceof Error ? error.message : "验证失败，请检查 Key 和网络。");
+		}
+	}
+	async function removeKey() {
+		const response = await fetch("/api/openai-key", { method: "DELETE" });
+		const result = await response.json();
+		if (!response.ok) {
+			setState("error");
+			setMessage(result.error || "移除失败。");
+			return;
+		}
+		setConfigured(Boolean(result.configured));
+		setState("idle");
+		setMessage(result.configured ? "临时 Key 已移除；服务端环境变量仍提供 API Key。" : "临时 API Key 已从当前本地服务会话移除。");
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "api-test-layer",
+		role: "presentation",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+			className: "api-test-dialog",
+			role: "dialog",
+			"aria-modal": "true",
+			"aria-labelledby": "api-test-title",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "api-test-close",
+					"aria-label": "关闭本地 API 测试",
+					onClick: onClose,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 18 })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "api-test-heading",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KeyRound, { size: 22 }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						id: "api-test-title",
+						children: "本地 API Key 测试"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "安全验证后，直接测试简历分析和职业教练。" })] })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "api-safety-note",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { size: 17 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "只用于当前本地服务进程" }), "Key 不写入 localStorage、Cookie、文件或 Git；重启服务或点击移除后即清除。验证请求会直接发送到 OpenAI。"] })]
+				}),
+				!localRequest && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "api-test-error",
+					children: "此窗口只允许在 localhost 或 127.0.0.1 使用。"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["OpenAI API Key", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					type: "password",
+					autoComplete: "off",
+					value: apiKey,
+					onChange: (event) => setApiKey(event.target.value),
+					placeholder: "sk-…",
+					disabled: !localRequest
+				})] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["模型 ID", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+					value: model,
+					onChange: (event) => setModel(event.target.value),
+					placeholder: "gpt-5.6-sol",
+					disabled: !localRequest
+				})] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "api-test-actions",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "primary",
+							disabled: !localRequest || state === "checking",
+							onClick: () => void validateKey(),
+							children: state === "checking" ? "验证中…" : "验证并用于本次会话"
+						}),
+						configured && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "secondary-action",
+							onClick: onOpenCoach,
+							children: "打开职业教练测试"
+						}),
+						configured && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "secondary-action danger",
+							onClick: () => void removeKey(),
+							children: "移除临时 Key"
+						})
+					]
+				}),
+				message && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: `api-test-message ${state === "error" ? "error" : state === "ready" ? "ready" : ""}`,
+					"aria-live": "polite",
+					children: message
+				})
+			]
+		})
+	});
+}
+function DashboardContent({ jobs, queued, reviewed, active, running, scanStats, linkedIn, userName, setSelected, updateStatus, runScan, onViewAll, onOpenSources }) {
+	const [highOnly, setHighOnly] = (0, import_react.useState)(false);
+	const [sortMode, setSortMode] = (0, import_react.useState)("score");
 	const highMatches = jobs.filter((job) => job.score >= 80);
-	const shown = active === "queue" ? jobs.filter((j) => j.status === "已加入") : active === "overview" ? highMatches.slice(0, 10) : jobs;
+	const shown = [...active === "queue" ? jobs.filter((j) => j.status === "已加入") : active === "overview" ? highMatches.slice(0, 10) : highOnly ? highMatches : jobs].sort((a, b) => sortMode === "company" ? a.company.localeCompare(b.company) : b.score - a.score);
 	const acceptanceRate = reviewed > 0 ? Math.round(queued / reviewed * 100) : null;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "content",
@@ -1032,13 +1390,21 @@ function DashboardContent({ jobs, queued, reviewed, active, running, scanStats, 
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "eyebrow",
-						children: "TUESDAY, JULY 21"
+						suppressHydrationWarning: true,
+						children: new Intl.DateTimeFormat("zh-CN", {
+							weekday: "long",
+							month: "long",
+							day: "numeric"
+						}).format(/* @__PURE__ */ new Date())
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: active === "queue" ? "申请队列" : active === "jobs" ? "全部职位" : `早上好，${userName.trim().split(/\s+/)[0] || "朋友"}` }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: active === "queue" ? "检查材料，准备好后再进入投递步骤。" : "雷达已经完成今日筛选，下面是最值得你花时间的机会。" })
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: active === "queue" ? "检查材料，准备好后再进入投递步骤。" : running ? "正在从公开职位板获取最新岗位，已有结果会保留到刷新完成。" : "下面是根据最新公开职位数据筛选出的优先机会。" })
 				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "next-run",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock3, { size: 18 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "下次自动扫描" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "明天 08:30" })] })]
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock3, { size: 18 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: running ? "实时刷新中" : "数据状态" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: scanStats.isDemo ? "演示数据" : scanStats.fetchedAt ? `更新于 ${new Date(scanStats.fetchedAt).toLocaleTimeString("zh-CN", {
+						hour: "2-digit",
+						minute: "2-digit"
+					})}` : "等待刷新" })] })]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
@@ -1052,11 +1418,7 @@ function DashboardContent({ jobs, queued, reviewed, active, running, scanStats, 
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "本次扫描职位" }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: scanStats.scanned }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("small", { children: [
-								"来自 ",
-								scanStats.sources,
-								" 个公开职位板"
-							] })
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: scanStats.isDemo ? "首次实时刷新后替换演示数据" : `来自 ${scanStats.sources} 个公开职位板` })
 						] })]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1125,18 +1487,60 @@ function DashboardContent({ jobs, queued, reviewed, active, running, scanStats, 
 					children: [running ? "分析中…" : "重新扫描", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowUpRight, { size: 17 })]
 				})]
 			}),
+			active !== "queue" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+				className: `linkedin-dashboard-card ${linkedIn.enabled ? "configured" : ""}`,
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "linkedin-dashboard-logo",
+						children: "in"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "linkedin-dashboard-copy",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "LINKEDIN JOBS" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: linkedIn.enabled ? linkedIn.keywords || "LinkedIn 职位搜索" : "把 LinkedIn 搜索加入 Dashboard" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: linkedIn.enabled ? `${linkedIn.location || "不限地点"} · ${linkedIn.datePosted === "day" ? "过去 24 小时" : linkedIn.datePosted === "week" ? "过去一周" : linkedIn.datePosted === "month" ? "过去一个月" : "不限时间"}${linkedIn.easyApply ? " · Easy Apply" : ""}` : "保存关键词与地点后，这里会固定显示你的 LinkedIn 搜索入口。" })
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "linkedin-dashboard-status",
+						children: linkedIn.enabled ? "已显示在 Dashboard" : "未配置"
+					}),
+					linkedIn.enabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: linkedInSearchUrl(linkedIn),
+						target: "_blank",
+						rel: "noreferrer",
+						children: ["查看 LinkedIn 职位", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { size: 15 })]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: onOpenSources,
+						children: ["配置 LinkedIn", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowUpRight, { size: 15 })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "linkedin-dashboard-boundary",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { size: 14 }), "LinkedIn 职位页由 LinkedIn 提供；当前应用不抓取登录数据。"]
+					})
+				]
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 				className: "jobs-section",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "section-header",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: active === "queue" ? `待确认申请 · ${shown.length}` : "今日最佳匹配" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: active === "queue" ? "系统只会准备材料，不会未经确认点击最终提交。" : "按综合匹配度排序 · 更新于 9:12 AM" })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: active === "queue" ? `待确认申请 · ${shown.length}` : "今日最佳匹配" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: active === "queue" ? "系统只会准备材料，不会未经确认点击最终提交。" : running ? "正在同步最新结果…" : scanStats.fetchedAt ? `最新数据 · ${new Date(scanStats.fetchedAt).toLocaleString("zh-CN")}` : "等待首次实时刷新" })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "filter-actions",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Funnel, { size: 16 }), "筛选"] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SlidersHorizontal, { size: 16 }),
-								"排序：匹配度",
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 14 })
-							] })]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => setHighOnly((current) => !current),
+								"aria-pressed": highOnly,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Funnel, { size: 16 }), highOnly ? "仅 80+" : "全部分数"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => setSortMode((current) => current === "score" ? "company" : "score"),
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SlidersHorizontal, { size: 16 }),
+									"排序：",
+									sortMode === "score" ? "匹配度" : "公司",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 14 })
+								]
+							})]
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1227,7 +1631,9 @@ function DashboardContent({ jobs, queued, reviewed, active, running, scanStats, 
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 16 })
 									})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										className: "more",
-										"aria-label": "更多",
+										"aria-label": "恢复为待确认",
+										title: "恢复为待确认",
+										onClick: () => updateStatus(job.id, "待确认"),
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ellipsis, { size: 18 })
 									})]
 								})
@@ -1255,6 +1661,49 @@ var defaultProfile = {
 	minSalary: "CA$130,000",
 	workMode: "hybrid"
 };
+function buildImportedLinkedInJob(input, profile) {
+	const ignored = new Set([
+		"senior",
+		"staff",
+		"lead",
+		"principal",
+		"manager",
+		"and",
+		"the",
+		"for",
+		"product",
+		"with",
+		"you",
+		"your"
+	]);
+	const tokenize = (value) => [...new Set(value.toLowerCase().replace(/[^a-z0-9]+/g, " ").split(" ").filter((token) => token.length > 2 && !ignored.has(token)))];
+	const targets = profile.roleKeywords.split(/[,;\n]/).map((item) => item.trim()).filter(Boolean);
+	const targetTokens = tokenize(targets.join(" "));
+	const candidateTokens = tokenize(`${input.role} ${input.description}`);
+	const overlap = targetTokens.filter((token) => candidateTokens.includes(token));
+	const exactRole = targets.some((target) => input.role.toLowerCase().includes(target.toLowerCase()) || target.toLowerCase().includes(input.role.toLowerCase()));
+	const locationMatch = profile.location.toLowerCase().split(/[,\s]+/).filter((part) => part.length > 3).some((part) => input.location.toLowerCase().includes(part));
+	const score = Math.max(35, Math.min(97, 48 + (exactRole ? 30 : 0) + Math.min(15, overlap.length * 5) + (locationMatch ? 4 : 0)));
+	const reason = exactRole ? `用户导入的职位名称与目标画像直接重合${locationMatch ? "，地点也符合偏好" : ""}` : overlap.length ? `用户导入的职位与目标关键词重合：${overlap.slice(0, 3).join("、")}` : "用户导入的职位与当前画像关联较弱，建议人工复核完整描述";
+	return {
+		id: Date.now(),
+		company: input.company.trim(),
+		initials: input.company.trim().slice(0, 1).toUpperCase() || "L",
+		color: "#0a66c2",
+		role: input.role.trim(),
+		location: input.location.trim(),
+		mode: /remote|远程/i.test(`${input.location} ${input.description}`) ? "远程" : "职位页查看",
+		salary: "职位页查看",
+		score,
+		reason,
+		tags: overlap.slice(0, 3).map((tag) => tag.replace(/^./, (letter) => letter.toUpperCase())),
+		source: "LinkedIn · 用户导入",
+		url: input.url.trim(),
+		posted: "刚刚导入",
+		status: "待确认",
+		description: input.description.trim()
+	};
+}
 function inferRolesLocally(text) {
 	const normalized = text.toLowerCase();
 	if (/product owner|产品负责人/.test(normalized)) return [
@@ -1320,7 +1769,7 @@ async function extractResumeText(file) {
 	}
 	throw new Error("请选择 PDF、DOCX、TXT 或 Markdown 文件。 ");
 }
-function ProfilePanel({ onProfileChanged }) {
+function ProfilePanel({ onProfileChanged, onOpenCoach }) {
 	const inputRef = (0, import_react.useRef)(null);
 	const [resume, setResume] = (0, import_react.useState)(null);
 	const [uploadState, setUploadState] = (0, import_react.useState)("idle");
@@ -1419,6 +1868,7 @@ function ProfilePanel({ onProfileChanged }) {
 			setResume(saved);
 			await analyzeResume(text);
 			setUploadState("idle");
+			onOpenCoach();
 		} catch (error) {
 			setUploadState("error");
 			setUploadError(error instanceof Error ? error.message : "无法读取这个文件，请尝试其他格式。");
@@ -1510,7 +1960,7 @@ function ProfilePanel({ onProfileChanged }) {
 							onClick: () => inputRef.current?.click(),
 							children: uploadState === "reading" ? "解析中…" : "选择简历文件"
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "最大 10 MB · 文件内容仅保存在本机" })
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "最大 10 MB · 文件保存在本机；启用 AI 时文字会发送到配置的 OpenAI API" })
 					] }),
 					uploadError && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "upload-error",
@@ -1597,6 +2047,289 @@ function ProfilePanel({ onProfileChanged }) {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "OPENAI_API_KEY" }),
 							"，然后重启本地服务。"
 						]
+					})
+				]
+			})]
+		})]
+	});
+}
+function buildLocalRoadmap(target) {
+	const role = target || "目标职位";
+	return [
+		{
+			title: "确认方向与差距",
+			duration: "第 1–2 周",
+			outcomes: [`拆解 10 个真实 ${role} 职位描述`, "标记已有证据、待验证经验和技能缺口"],
+			project: "产出一页能力差距表，并选择一个最想解决的真实问题。"
+		},
+		{
+			title: "补齐核心能力",
+			duration: "第 3–6 周",
+			outcomes: ["完成 1 门针对最高优先级缺口的课程", "每周用小练习验证知识，而不是只看课程"],
+			project: `完成一个贴近 ${role} 日常工作的迷你项目。`
+		},
+		{
+			title: "做出可展示案例",
+			duration: "第 7–10 周",
+			outcomes: ["记录问题、约束、决策、迭代和结果", "邀请 2 位从业者给出反馈并完成一次迭代"],
+			project: "发布一个包含过程证据与复盘的作品案例。"
+		},
+		{
+			title: "进入市场验证",
+			duration: "第 11–12 周",
+			outcomes: ["更新简历与个人资料中的可迁移证据", "完成 3 次信息访谈和 2 次模拟面试"],
+			project: `用定向申请验证 ${role} 方向，并根据反馈调整下一轮计划。`
+		}
+	];
+}
+function CareerCoachPanel({ onOpenProfile }) {
+	const [resume] = (0, import_react.useState)(() => {
+		if (typeof window === "undefined") return null;
+		try {
+			return JSON.parse(localStorage.getItem("cat-career-resume") || "null");
+		} catch {
+			return null;
+		}
+	});
+	const [target, setTarget] = (0, import_react.useState)(() => {
+		if (typeof window === "undefined") return "";
+		try {
+			return localStorage.getItem("cat-career-coach-target") || JSON.parse(localStorage.getItem("cat-career-profile") || "null")?.roleKeywords?.split(",")[0]?.trim() || "";
+		} catch {
+			return "";
+		}
+	});
+	const [messages, setMessages] = (0, import_react.useState)(() => {
+		if (typeof window === "undefined") return [];
+		try {
+			return JSON.parse(localStorage.getItem("cat-career-coach-messages") || "[]");
+		} catch {
+			return [];
+		}
+	});
+	const [roadmap, setRoadmap] = (0, import_react.useState)(() => {
+		if (typeof window === "undefined") return [];
+		try {
+			return JSON.parse(localStorage.getItem("cat-career-coach-roadmap") || "[]");
+		} catch {
+			return [];
+		}
+	});
+	const [draft, setDraft] = (0, import_react.useState)("");
+	const [sending, setSending] = (0, import_react.useState)(false);
+	const [coachMode, setCoachMode] = (0, import_react.useState)(null);
+	const messagesEnd = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		if (!resume || messages.length) return;
+		const roles = inferRolesLocally(resume.text);
+		setMessages([{
+			id: crypto.randomUUID(),
+			role: "assistant",
+			content: `我已读取《${resume.name}》。从明确出现的经历看，你可能适合 ${roles.slice(0, 2).join(" 或 ")}。不过职位名称并不能说明你真正喜欢什么：你最有成就感的一个项目是什么？你在其中亲自做了哪些决定，又产生了什么结果？`
+		}]);
+		setRoadmap(buildLocalRoadmap(target || roles[0]));
+		setCoachMode("local");
+	}, [resume]);
+	(0, import_react.useEffect)(() => {
+		localStorage.setItem("cat-career-coach-messages", JSON.stringify(messages));
+		messagesEnd.current?.scrollIntoView({ behavior: "smooth" });
+	}, [messages]);
+	(0, import_react.useEffect)(() => {
+		localStorage.setItem("cat-career-coach-roadmap", JSON.stringify(roadmap));
+	}, [roadmap]);
+	(0, import_react.useEffect)(() => {
+		localStorage.setItem("cat-career-coach-target", target);
+	}, [target]);
+	async function sendMessage(suggested) {
+		const content = (suggested || draft).trim();
+		if (!content || !resume || sending) return;
+		const userMessage = {
+			id: crypto.randomUUID(),
+			role: "user",
+			content
+		};
+		const history = [...messages, userMessage];
+		setMessages(history);
+		setDraft("");
+		setSending(true);
+		try {
+			const response = await fetch("/api/career-coach", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					resumeText: resume.text,
+					targetRole: target,
+					messages: history.slice(-10).map(({ role, content: text }) => ({
+						role,
+						content: text
+					}))
+				})
+			});
+			const result = await response.json();
+			if (!response.ok || !result.reply) throw new Error(result.error || "AI coach unavailable");
+			setMessages((current) => [...current, {
+				id: crypto.randomUUID(),
+				role: "assistant",
+				content: result.reply
+			}]);
+			if (result.roadmap?.length) setRoadmap(result.roadmap);
+			setCoachMode("ai");
+		} catch {
+			const roles = inferRolesLocally(resume.text);
+			setMessages((current) => [...current, {
+				id: crypto.randomUUID(),
+				role: "assistant",
+				content: `我先用本地教练模式继续。你提到“${content.slice(0, 80)}”。为了判断这段经验能否迁移到 ${target || roles[0]}，请补充三个证据：你解决了谁的问题、你亲自做了什么、结果如何衡量？有了这些信息，我可以帮助你把经历改写成目标岗位能理解的案例。`
+			}]);
+			setRoadmap(buildLocalRoadmap(target || roles[0]));
+			setCoachMode("local");
+		} finally {
+			setSending(false);
+		}
+	}
+	function resetConversation() {
+		const roles = inferRolesLocally(resume.text);
+		setMessages([{
+			id: crypto.randomUUID(),
+			role: "assistant",
+			content: `我们重新开始。简历显示你具备与 ${roles[0]} 相关的经验，但我不会仅凭职位名称替你决定方向。你现在最想保留的工作内容是什么，最想摆脱的又是什么？`
+		}]);
+		setRoadmap(buildLocalRoadmap(target));
+		localStorage.removeItem("cat-career-coach-messages");
+	}
+	if (!resume) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "content narrow",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+			className: "page-heading",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "eyebrow",
+					children: "CAREER COACH"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "AI 职业教练" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "先导入简历，教练才会基于真实经历提问，而不是给出泛泛建议。" })
+			] })
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+			className: "panel coach-empty",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageCircle, { size: 30 }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "导入简历后开始对话" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "我们会识别可迁移经验、探索转行方向，并生成可执行的学习路线。" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "primary",
+					onClick: onOpenProfile,
+					children: "前往导入简历"
+				})
+			]
+		})]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "content coach-page",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+			className: "page-heading",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "eyebrow",
+					children: "CAREER COACH"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "职业方向对话" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "基于简历证据探索下一步，也可以讨论完全不同的职业方向。" })
+			] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+				className: `coach-mode ${coachMode === "ai" ? "ai" : ""}`,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {}), coachMode === "ai" ? "AI 深度教练" : "本地教练模式"]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+			className: "coach-layout",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "panel coach-chat",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "coach-toolbar",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageCircle, { size: 18 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: resume.name }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "对话保存在当前浏览器" })] })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: resetConversation,
+							children: "重新开始"
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "coach-messages",
+						"aria-live": "polite",
+						children: [
+							messages.map((message) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: `coach-message ${message.role}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: message.role === "assistant" ? "教练" : "你" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: message.content })]
+							}, message.id)),
+							sending && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "coach-message assistant thinking",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "教练" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "正在梳理你的经历与目标…" })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: messagesEnd })
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "coach-prompts",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => void sendMessage("我不喜欢现在的工作，想探索可以转去哪些领域。"),
+								children: "我想转行"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => void sendMessage("请挑战一下我当前的目标职位是否现实。"),
+								children: "检验目标"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => void sendMessage("请根据我的经历追问一个最关键的项目。"),
+								children: "深挖项目"
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+						className: "coach-composer",
+						onSubmit: (event) => {
+							event.preventDefault();
+							sendMessage();
+						},
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+							"aria-label": "给职业教练发送消息",
+							value: draft,
+							onChange: (event) => setDraft(event.target.value),
+							placeholder: "例如：我做了 5 年运营，但想转到产品管理，我该从哪里开始？",
+							rows: 3
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "submit",
+							disabled: !draft.trim() || sending,
+							"aria-label": "发送",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Send, { size: 17 })
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "coach-privacy",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { size: 13 }), "对话保存在本机；启用 AI 教练时，简历文字与最近对话会发送到你配置的 OpenAI API。"]
+					})
+				]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", {
+				className: "panel roadmap-panel",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "roadmap-heading",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, { size: 20 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "目标学习路线" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "路线会随对话和目标更新" })] })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["目标职位", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						value: target,
+						onChange: (event) => setTarget(event.target.value),
+						onBlur: (event) => setRoadmap(buildLocalRoadmap(event.target.value)),
+						placeholder: "例如：Product Manager"
+					})] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "roadmap-list",
+						children: roadmap.map((stage, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "roadmap-index",
+							children: index + 1
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: stage.duration }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: stage.title }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: stage.outcomes.map((outcome) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: outcome }, outcome)) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "实践项目" }), stage.project] })
+						] })] }, `${stage.title}-${index}`))
 					})
 				]
 			})]
@@ -1729,19 +2462,7 @@ function MaterialsPanel({ jobs, onOpenProfile, onOpenQueue }) {
 		]
 	});
 }
-function SourcesPanel() {
-	const defaultLinkedIn = {
-		enabled: false,
-		keywords: "",
-		location: "Toronto, Canada",
-		workplace: "hybrid-remote",
-		datePosted: "day",
-		experience: ["4", "5"],
-		employment: "F",
-		easyApply: false,
-		mostRecent: true,
-		sessionVerified: false
-	};
+function SourcesPanel({ onRefresh, onLinkedInChange, onLinkedInImport }) {
 	const [sourceEnabled, setSourceEnabled] = (0, import_react.useState)({
 		Greenhouse: true,
 		Lever: true,
@@ -1751,7 +2472,13 @@ function SourcesPanel() {
 	const [linkedIn, setLinkedIn] = (0, import_react.useState)(defaultLinkedIn);
 	const [showLinkedIn, setShowLinkedIn] = (0, import_react.useState)(false);
 	const [sourceNotice, setSourceNotice] = (0, import_react.useState)("");
-	const [loginCheckOpened, setLoginCheckOpened] = (0, import_react.useState)(false);
+	const [linkedInImport, setLinkedInImport] = (0, import_react.useState)({
+		company: "",
+		role: "",
+		location: "",
+		url: "",
+		description: ""
+	});
 	(0, import_react.useEffect)(() => {
 		const savedSources = localStorage.getItem("cat-career-sources");
 		const savedLinkedIn = localStorage.getItem("cat-career-linkedin");
@@ -1771,6 +2498,7 @@ function SourcesPanel() {
 			};
 			setLinkedIn(parsed);
 			setShowLinkedIn(parsed.enabled);
+			onLinkedInChange(parsed);
 		} catch {
 			localStorage.removeItem("cat-career-linkedin");
 		}
@@ -1798,26 +2526,14 @@ function SourcesPanel() {
 			setLinkedIn(config);
 			setShowLinkedIn(enabled);
 			localStorage.setItem("cat-career-linkedin", JSON.stringify(config));
-		}
-	}
-	function linkedInUrl() {
-		const params = new URLSearchParams();
-		if (linkedIn.keywords.trim()) params.set("keywords", linkedIn.keywords.trim());
-		if (linkedIn.location.trim()) params.set("location", linkedIn.location.trim());
-		if (linkedIn.datePosted === "day") params.set("f_TPR", "r86400");
-		if (linkedIn.datePosted === "week") params.set("f_TPR", "r604800");
-		if (linkedIn.datePosted === "month") params.set("f_TPR", "r2592000");
-		if (linkedIn.workplace === "remote") params.set("f_WT", "2");
-		if (linkedIn.workplace === "hybrid") params.set("f_WT", "3");
-		if (linkedIn.workplace === "onsite") params.set("f_WT", "1");
-		if (linkedIn.workplace === "hybrid-remote") params.set("f_WT", "2,3");
-		if (linkedIn.experience.length) params.set("f_E", linkedIn.experience.join(","));
-		if (linkedIn.employment) params.set("f_JT", linkedIn.employment);
-		if (linkedIn.easyApply) params.set("f_AL", "true");
-		if (linkedIn.mostRecent) params.set("sortBy", "DD");
-		return `https://www.linkedin.com/jobs/search/?${params.toString()}`;
+			onLinkedInChange(config);
+		} else window.setTimeout(onRefresh, 0);
 	}
 	function saveLinkedIn() {
+		if (!linkedIn.keywords.trim() || !linkedIn.location.trim()) {
+			setSourceNotice("请先填写职位关键词和地点");
+			return false;
+		}
 		const config = {
 			...linkedIn,
 			enabled: true
@@ -1828,24 +2544,12 @@ function SourcesPanel() {
 		};
 		setLinkedIn(config);
 		setSourceEnabled(sources);
+		onLinkedInChange(config);
 		localStorage.setItem("cat-career-linkedin", JSON.stringify(config));
 		localStorage.setItem("cat-career-sources", JSON.stringify(sources));
-		setSourceNotice("LinkedIn 搜索配置已保存");
+		setSourceNotice("LinkedIn 搜索已保存并显示在 Dashboard");
 		window.setTimeout(() => setSourceNotice(""), 2500);
-	}
-	function openLinkedInCheck() {
-		setLoginCheckOpened(true);
-		window.open(linkedInUrl(), "_blank", "noopener,noreferrer");
-	}
-	function confirmLinkedInSession(confirmed) {
-		const config = {
-			...linkedIn,
-			sessionVerified: confirmed
-		};
-		setLinkedIn(config);
-		localStorage.setItem("cat-career-linkedin", JSON.stringify(config));
-		setSourceNotice(confirmed ? "已记录：你确认 LinkedIn 登录可用" : "已撤销登录确认");
-		window.setTimeout(() => setSourceNotice(""), 2500);
+		return true;
 	}
 	function toggleExperience(value) {
 		setLinkedIn((current) => ({
@@ -1853,22 +2557,43 @@ function SourcesPanel() {
 			experience: current.experience.includes(value) ? current.experience.filter((item) => item !== value) : [...current.experience, value]
 		}));
 	}
+	function importJob() {
+		if (!linkedInImport.company.trim() || !linkedInImport.role.trim() || !linkedInImport.location.trim() || !linkedInImport.description.trim()) {
+			setSourceNotice("导入评分需要公司、职位、地点和完整职位描述");
+			return;
+		}
+		try {
+			const url = new URL(linkedInImport.url);
+			if (!/(^|\.)linkedin\.com$/i.test(url.hostname)) throw new Error("not LinkedIn");
+		} catch {
+			setSourceNotice("请输入有效的 LinkedIn 职位链接");
+			return;
+		}
+		onLinkedInImport(linkedInImport);
+		setLinkedInImport({
+			company: "",
+			role: "",
+			location: "",
+			url: "",
+			description: ""
+		});
+	}
 	const sources = [
 		{
 			name: "Greenhouse",
-			detail: "5 个公司职位板"
+			detail: "4 个公司职位板 · 自动实时刷新"
 		},
 		{
 			name: "Lever",
-			detail: "4 个公司职位板"
+			detail: "1 个公司职位板 · 自动实时刷新"
 		},
 		{
 			name: "Ashby",
-			detail: "3 个公司职位板"
+			detail: "1 个公司职位板 · 自动实时刷新"
 		},
 		{
 			name: "LinkedIn",
-			detail: linkedIn.sessionVerified ? "你已确认浏览器可用" : "等待你确认浏览器登录"
+			detail: linkedIn.enabled ? "搜索入口已显示在 Dashboard" : "配置后显示在 Dashboard"
 		}
 	];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1882,14 +2607,14 @@ function SourcesPanel() {
 						children: "JOB SOURCES"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { children: "职位来源" }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "优先使用公开职位接口；LinkedIn 使用你的浏览器登录会话和已保存搜索。" })
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "公开职位板会在 Dashboard 自动刷新；LinkedIn 会生成并保存搜索链接，由你在已登录的浏览器中查看。" })
 				] })
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 				className: "panel source-list",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "section-header",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "已配置来源" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "扫描时会自动去重并过滤过期链接。" })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { children: "+ 添加公司" })]
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "已配置来源" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "公开职位板扫描时会自动去重；LinkedIn 不会被后台抓取。" })] })
 				}), sources.map((source) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: `source-row ${source.name === "LinkedIn" && showLinkedIn ? "selected" : ""}`,
 					children: [
@@ -1927,10 +2652,10 @@ function SourcesPanel() {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "linkedin-glyph large",
 								children: "in"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "LinkedIn 搜索配置" })]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "本地应用不能读取 LinkedIn Cookie；请在打开的页面中检查登录状态，再回来确认。" })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							className: `session-badge ${linkedIn.sessionVerified ? "verified" : ""}`,
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {}), linkedIn.sessionVerified ? "已由你确认" : "等待你确认"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "LinkedIn Dashboard 搜索" })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "设置搜索条件并保存后，Dashboard 会持续显示这个 LinkedIn 搜索入口。" })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: `session-badge ${linkedIn.enabled ? "verified" : ""}`,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {}), linkedIn.enabled ? "已加入 Dashboard" : "待配置"]
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1942,11 +2667,9 @@ function SourcesPanel() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: linkedIn.sessionVerified ? "done" : "",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "2" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "人工确认登录" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "每日打开并筛选" })] })
+								className: linkedIn.enabled ? "done" : "",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "2" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "保存到 Dashboard" })]
+							})
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -2088,34 +2811,19 @@ function SourcesPanel() {
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "linkedin-login-help",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "如何确认登录？" }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "点击“打开登录检查”。" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "在 LinkedIn 页面确认能看到右上角头像和职位列表。" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "回到这里点击“我能看到职位结果”。" })
-							] }),
-							loginCheckOpened && !linkedIn.sessionVerified && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 14 }), "检查页面已打开；确认页面正常后完成第 3 步。"] })
-						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "linkedin-actions",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								className: "secondary-action",
-								onClick: openLinkedInCheck,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { size: 15 }), "打开登录检查"]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								className: `secondary-action ${linkedIn.sessionVerified ? "confirmed" : ""}`,
-								onClick: () => confirmLinkedInSession(!linkedIn.sessionVerified),
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 15 }), linkedIn.sessionVerified ? "撤销登录确认" : "我能看到职位结果"]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								className: "primary",
 								onClick: saveLinkedIn,
-								children: "保存 LinkedIn 配置"
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 15 }), "保存到 Dashboard"]
+							}),
+							linkedIn.keywords.trim() && linkedIn.location.trim() && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								className: "secondary-action",
+								href: linkedInSearchUrl(linkedIn),
+								target: "_blank",
+								rel: "noreferrer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { size: 15 }), "预览 LinkedIn 搜索"]
 							}),
 							sourceNotice && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "source-saved",
@@ -2125,7 +2833,70 @@ function SourcesPanel() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "linkedin-note",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { size: 17 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "不会保存 LinkedIn 密码或 Cookie。" }), "受浏览器同源安全限制，这里的状态是“由你确认”，不是系统读取登录凭证后的自动验证。最终申请仍需你确认。"] })]
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { size: 17 }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Dashboard 会显示搜索入口和筛选条件。" }), "职位结果仍由 LinkedIn 提供；当前应用不抓取已登录页面、不截取搜索结果，也不保存密码或 Cookie。获得 LinkedIn 授权职位读取 API 后，可再升级为职位列表同步。"] })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "linkedin-import",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "linkedin-glyph large",
+								children: "in"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "导入 LinkedIn 职位并评分" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "从职位页复制完整描述；系统会按当前求职画像评分，并把结果加入 Dashboard。" })] })] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "linkedin-import-grid",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["公司", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										value: linkedInImport.company,
+										onChange: (event) => setLinkedInImport({
+											...linkedInImport,
+											company: event.target.value
+										}),
+										placeholder: "例如：Acme"
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["职位名称", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										value: linkedInImport.role,
+										onChange: (event) => setLinkedInImport({
+											...linkedInImport,
+											role: event.target.value
+										}),
+										placeholder: "例如：Senior Product Designer"
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["地点", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										value: linkedInImport.location,
+										onChange: (event) => setLinkedInImport({
+											...linkedInImport,
+											location: event.target.value
+										}),
+										placeholder: "例如：Toronto, Canada"
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["LinkedIn 职位链接", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										value: linkedInImport.url,
+										onChange: (event) => setLinkedInImport({
+											...linkedInImport,
+											url: event.target.value
+										}),
+										placeholder: "https://www.linkedin.com/jobs/view/…"
+									})] })
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["完整职位描述", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+								value: linkedInImport.description,
+								onChange: (event) => setLinkedInImport({
+									...linkedInImport,
+									description: event.target.value
+								}),
+								rows: 7,
+								placeholder: "粘贴 Responsibilities、Qualifications 等完整职位文字，描述越完整，评分越可靠。"
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "linkedin-import-actions",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									className: "primary",
+									onClick: importJob,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { size: 15 }), "导入、评分并显示在 Dashboard"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "评分只基于你提供的文字和当前画像；不会访问 LinkedIn 会话。" })]
+							})
+						]
 					})
 				]
 			})
@@ -2134,7 +2905,7 @@ function SourcesPanel() {
 }
 function AutomationPanel({ identity, onIdentityChange }) {
 	const [apiKey, setApiKey] = (0, import_react.useState)("");
-	const [model, setModel] = (0, import_react.useState)("gpt-5.6");
+	const [model, setModel] = (0, import_react.useState)("gpt-5.6-sol");
 	const [hasKey, setHasKey] = (0, import_react.useState)(false);
 	const [keyStatus, setKeyStatus] = (0, import_react.useState)("idle");
 	const [keyMessage, setKeyMessage] = (0, import_react.useState)("");
@@ -2281,7 +3052,7 @@ function AutomationPanel({ identity, onIdentityChange }) {
 								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["模型 ID", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 									value: model,
 									onChange: (event) => setModel(event.target.value),
-									placeholder: "gpt-5.6"
+									placeholder: "gpt-5.6-sol"
 								})] })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -2360,7 +3131,7 @@ function AutomationPanel({ identity, onIdentityChange }) {
 		]
 	});
 }
-function JobDrawer({ job, onClose, onStatus }) {
+function JobDrawer({ job, onClose, onStatus, onRemoveImported }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "drawer-layer",
 		onMouseDown: onClose,
@@ -2445,6 +3216,10 @@ function JobDrawer({ job, onClose, onStatus }) {
 							target: "_blank",
 							rel: "noreferrer",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { size: 16 }), "打开原岗位"]
+						}),
+						job.source === "LinkedIn · 用户导入" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => onRemoveImported(job.id),
+							children: "移除导入"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => onStatus(job.id, "已跳过"),

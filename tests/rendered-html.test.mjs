@@ -14,5 +14,6 @@ test("renders the career dashboard shell", async () => {
   const html = await response.text();
   assert.match(html, /猫猫王求职/);
   assert.match(html, /本地优先的智能职位筛选与申请工作台/);
+  assert.match(html, /把 LinkedIn 搜索加入 Dashboard/);
   assert.doesNotMatch(html, /codex-preview|Building your site/);
 });

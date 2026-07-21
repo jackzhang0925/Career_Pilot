@@ -1,4 +1,4 @@
-type ScanProfile = { roleKeywords?: string; location?: string; workMode?: string };
+type ScanProfile = { roleKeywords?: string; location?: string; workMode?: string; sources?: string[] };
 
 type Candidate = {
   externalId: string;
@@ -19,7 +19,12 @@ const greenhouseBoards = [
   { company: "Okta", board: "okta", color: "#1662dd" },
 ];
 
+const leverBoards = [
+  { company: "Wealthsimple", board: "wealthsimple", color: "#6d5dfc" },
+];
+
 const companyColors = new Map(greenhouseBoards.map((source) => [source.company, source.color]));
+for (const source of leverBoards) companyColors.set(source.company, source.color);
 companyColors.set("Cohere", "#39594d");
 
 function cleanHtml(value = "") {
@@ -95,7 +100,7 @@ function relativeDate(value?: string) {
 
 async function fetchGreenhouse(company: string, board: string): Promise<Candidate[]> {
   const response = await fetch(`https://boards-api.greenhouse.io/v1/boards/${board}/jobs?content=true`, { signal: AbortSignal.timeout(12_000) });
-  if (!response.ok) return [];
+  if (!response.ok) throw new Error(`${company} Greenhouse returned ${response.status}`);
   const payload = await response.json() as { jobs?: Array<{ id: number; title: string; absolute_url: string; updated_at?: string; location?: { name?: string }; content?: string }> };
   return (payload.jobs || []).map((job) => ({
     externalId: `${board}-${job.id}`,
@@ -110,9 +115,26 @@ async function fetchGreenhouse(company: string, board: string): Promise<Candidat
   }));
 }
 
+async function fetchLever(company: string, board: string): Promise<Candidate[]> {
+  const response = await fetch(`https://api.lever.co/v0/postings/${board}?mode=json`, { signal: AbortSignal.timeout(12_000) });
+  if (!response.ok) throw new Error(`${company} Lever returned ${response.status}`);
+  const payload = await response.json() as Array<{ id: string; text: string; hostedUrl: string; createdAt?: number; categories?: { location?: string; commitment?: string }; descriptionPlain?: string; additionalPlain?: string }>;
+  return payload.filter((job) => job.hostedUrl).map((job) => ({
+    externalId: `${board}-${job.id}`,
+    company,
+    role: job.text,
+    location: job.categories?.location || "Location on posting",
+    mode: /remote/i.test(job.categories?.location || "") ? "远程" : "职位页查看",
+    source: "Lever",
+    url: job.hostedUrl,
+    publishedAt: job.createdAt ? new Date(job.createdAt).toISOString() : undefined,
+    description: [job.descriptionPlain, job.additionalPlain, job.categories?.commitment].filter(Boolean).join(" "),
+  }));
+}
+
 async function fetchCohere(): Promise<Candidate[]> {
   const response = await fetch("https://api.ashbyhq.com/posting-api/job-board/cohere", { signal: AbortSignal.timeout(12_000) });
-  if (!response.ok) return [];
+  if (!response.ok) throw new Error(`Cohere Ashby returned ${response.status}`);
   const payload = await response.json() as { jobs?: Array<{ id: string; title: string; location?: string; secondaryLocations?: Array<{ location?: string }>; isRemote?: boolean; workplaceType?: string; publishedAt?: string; jobUrl: string; descriptionHtml?: string }> };
   return (payload.jobs || []).filter((job) => job.jobUrl).map((job) => ({
     externalId: `cohere-${job.id}`,
@@ -129,11 +151,24 @@ async function fetchCohere(): Promise<Candidate[]> {
 
 export async function POST(request: Request) {
   const profile = await request.json().catch(() => ({})) as ScanProfile;
-  const batches = await Promise.allSettled([
-    ...greenhouseBoards.map((source) => fetchGreenhouse(source.company, source.board)),
-    fetchCohere(),
-  ]);
+  const requested = Array.isArray(profile.sources) ? profile.sources : ["Greenhouse", "Lever", "Ashby"];
+  const requestedSources = new Set(requested.filter((source) => ["Greenhouse", "Lever", "Ashby"].includes(source)));
+  const fetchers = [
+    ...greenhouseBoards.filter(() => requestedSources.has("Greenhouse")).map((source) => ({ name: `${source.company} · Greenhouse`, run: () => fetchGreenhouse(source.company, source.board) })),
+    ...leverBoards.filter(() => requestedSources.has("Lever")).map((source) => ({ name: `${source.company} · Lever`, run: () => fetchLever(source.company, source.board) })),
+    ...(requestedSources.has("Ashby") ? [{ name: "Cohere · Ashby", run: fetchCohere }] : []),
+  ];
+  if (!fetchers.length) {
+    return Response.json({ error: "请至少启用一个可自动扫描的公开职位来源。" }, { status: 400, headers: { "Cache-Control": "no-store" } });
+  }
+
+  const batches = await Promise.allSettled(fetchers.map((source) => source.run()));
   const candidates = batches.flatMap((batch) => batch.status === "fulfilled" ? batch.value : []);
+  const failures = batches.flatMap((batch, index) => batch.status === "rejected" ? [fetchers[index].name] : []);
+  const succeeded = batches.length - failures.length;
+  if (succeeded === 0) {
+    return Response.json({ error: "所有职位来源暂时不可用。", failures, fetchedAt: new Date().toISOString() }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
   const deduplicated = [...new Map(candidates.map((candidate) => [candidate.url, candidate])).values()];
   const ranked = deduplicated.map((candidate) => {
     const match = scoreCandidate(candidate, profile);
@@ -156,5 +191,8 @@ export async function POST(request: Request) {
     };
   }).sort((a, b) => b.score - a.score || a.company.localeCompare(b.company));
 
-  return Response.json({ jobs: ranked.slice(0, 38), scanned: deduplicated.length, sources: batches.filter((batch) => batch.status === "fulfilled").length });
+  return Response.json(
+    { jobs: ranked.slice(0, 38), scanned: deduplicated.length, sources: succeeded, attemptedSources: fetchers.length, failures, fetchedAt: new Date().toISOString() },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }

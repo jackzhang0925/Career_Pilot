@@ -21,7 +21,7 @@ function outputText(payload: unknown) {
 
 export async function GET() {
   const runtime = getRuntimeOpenAISettings();
-  return Response.json({ configured: Boolean(runtime?.apiKey || process.env.OPENAI_API_KEY), model: runtime?.model || process.env.OPENAI_MODEL || "gpt-5.6" });
+  return Response.json({ configured: Boolean(runtime?.apiKey || process.env.OPENAI_API_KEY), model: runtime?.model || process.env.OPENAI_MODEL || "gpt-5.6-sol" });
 }
 
 export async function POST(request: Request) {
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   if (!apiKey) return Response.json({ error: "尚未配置 OpenAI API Key。" }, { status: 503 });
   const resumeText = body?.resumeText?.trim();
   if (!resumeText || resumeText.length < 80) return Response.json({ error: "简历文字不足，无法分析。" }, { status: 400 });
-  const model = runtime?.model || process.env.OPENAI_MODEL || "gpt-5.6";
+  const model = runtime?.model || process.env.OPENAI_MODEL || "gpt-5.6-sol";
 
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
