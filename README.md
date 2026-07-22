@@ -2,6 +2,9 @@
 
 一个本地优先的职位筛选与申请工作台。产品思路参考 [career-ops](https://github.com/santifer/career-ops)：先用简历、求职偏好和硬性条件从大量职位中筛选高质量机会，再生成针对性材料，最后由用户确认是否提交。
 
+## Live DEMO
+https://raw.githack.com/jackzhang0925/Career_Pilot/main/live-demo/index.html
+
 ## 当前版本
 
 - 中文本地 Web UI，支持桌面端和移动端
