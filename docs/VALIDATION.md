@@ -11,7 +11,7 @@ Last audited: 2026-07-21
 | Real-time job fetching | Complete for public boards | Initial load, visible-tab five-minute interval, and tab-return refresh are implemented. Greenhouse, Lever, and Ashby adapters returned live results during the audit, with update time and partial-failure reporting. LinkedIn is intentionally excluded from background fetching. |
 | Missing function logic | Complete for exposed controls | Filtering, score/company sorting, help, notifications, source toggles, status restoration, resume upload, coaching shortcuts, roadmap target updates, API test modal, and close/remove flows have handlers. |
 | Collaborative development CI | Complete | Pull requests and collaborator branches run locked install, lint, production build, API tests, and rendered-page tests with concurrency cancellation and read-only repository permissions. |
-| Free live demo from GitHub | Complete; owner must enable Pages once | `Actions → Launch GitHub Pages Demo → Run workflow` and pushes to `main` validate, build a static demo, upload a Pages artifact, and deploy without Cloudflare credentials. |
+| Free live demo from GitHub | Complete with no repository setup | `live-demo/` is committed with relative assets and can be opened through GitHack immediately after push. Actions rebuilds it and fails if the committed demo is stale; no Pages API, Cloudflare credentials, or deployment token is used. |
 | Comprehensive changelog | Complete | `CHANGELOG.md` records added, changed, fixed, and security behavior, including audit fixes. |
 | Resume-triggered career conversation | Complete | A synthetic TXT resume was parsed in the browser, local profile inference ran, and the UI automatically opened the coach with a resume-specific evidence question. |
 | Career-switch discussion | Complete | Free-form messages and quick prompts produce evidence-focused follow-ups; local fallback works without an API key. |
@@ -23,7 +23,7 @@ Last audited: 2026-07-21
 
 These are not implementation gaps, but they cannot be truthfully completed without owner-controlled accounts or credentials:
 
-1. In **Settings → Pages**, select **GitHub Actions** as the publishing source, then run the Pages workflow once.
+1. Push the generated `live-demo/` directory to the public repository and open the documented GitHack URL.
 2. Use the local API test window with a real OpenAI key to validate the selected model on the owner’s account. Do not paste the key into an issue, commit, chat, screenshot, or test fixture.
 3. Open the generated LinkedIn search in the owner’s browser session. For scoring, copy one job’s link and full description into the opt-in importer; the application deliberately does not inspect the login state itself.
 

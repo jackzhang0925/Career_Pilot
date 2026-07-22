@@ -14,7 +14,7 @@ All notable changes to Career Pilot are documented here. The format follows [Kee
 - A living 12-week learning roadmap with measurable outcomes and a practical portfolio project for every stage; AI responses can refine it as the target changes.
 - A local coaching fallback when no OpenAI key is configured, so career exploration and the starter roadmap remain available.
 - GitHub Actions CI for collaborator branches and pull requests, including locked dependency installation, linting, production build, and rendered HTML tests.
-- A free static GitHub Pages demo build and deployment workflow that requires no Cloudflare account, API token, or paid hosting.
+- A committed static GitHub demo build that can be opened through GitHack without Pages enablement, Cloudflare, API tokens, or paid hosting.
 - A pull-request checklist and default code ownership for safer collaborative development.
 - Working score filters, company/match sorting, notification feedback, help navigation, and status restoration for controls that previously had no behavior.
 - A dedicated local API testing window with masked key input, model validation, one-click career-coach testing, and session-key removal.
@@ -29,8 +29,7 @@ All notable changes to Career Pilot are documented here. The format follows [Kee
 - Source counts in the interface now match the adapters that are actually implemented.
 - Dashboard dates and update times are generated from the current locale instead of hard-coded sample timestamps.
 - Resume upload now continues directly into the coaching conversation after profile analysis.
-- Replaced the Cloudflare production Launch with an explicitly labeled GitHub Pages demo. Server-only scanning and AI endpoints are disabled in the static build while browser-local demo features remain interactive.
-- Updated the GitHub Pages actions to their Node.js 24 releases (`configure-pages@v6`, `upload-pages-artifact@v5`, and `deploy-pages@v5`) and documented the one-time Pages enablement required before the first run.
+- Replaced deployment-dependent Launch workflows with an explicitly labeled, repository-hosted static demo and freshness validation. Server-only scanning and AI endpoints are disabled while browser-local demo features remain interactive.
 
 ### Fixed
 

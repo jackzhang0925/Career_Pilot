@@ -1,4 +1,4 @@
-name: Launch GitHub Pages Demo
+name: Validate GitHub-hosted Demo
 
 on:
   workflow_dispatch:
@@ -8,16 +8,14 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: github-pages
+  group: demo-validation
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Validate and build demo
+  validate:
+    name: Validate committed live demo
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,23 +30,7 @@ jobs:
         run: npm ci
       - name: Run repository checks
         run: npm run check
-      - name: Build static GitHub Pages demo
+      - name: Rebuild static demo
         run: npm run build:demo
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: dist-pages
-
-  deploy:
-    name: Publish free live demo
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+      - name: Verify committed demo is current
+        run: git diff --exit-code -- live-demo

@@ -3,11 +3,11 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   root: "demo",
-  base: "/Career_Pilot/",
+  base: "./",
   publicDir: "../public",
   plugins: [react()],
   build: {
-    outDir: "../dist-pages",
+    outDir: "../live-demo",
     emptyOutDir: true,
   },
 });

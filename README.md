@@ -70,13 +70,13 @@ LinkedIn 页面需要用户自己的浏览器登录会话。应用不读取 Link
 
 Dashboard 的自动实时刷新只包含 Greenhouse、Lever 和 Ashby 等公开职位板。LinkedIn 搜索卡不计入实时扫描数量，也不会被误报为已评分职位。需要评分时，用户可在职位来源页主动粘贴 LinkedIn 职位链接及完整职位描述；本地规则会按当前画像评分并将它加入职位池，来源明确标记为“LinkedIn · 用户导入”。
 
-## GitHub 协作与免费 Live Demo
+## GitHub 协作与零配置 Live Demo
 
 - 协作者分支和 Pull Request 会运行 CI，执行锁定安装、lint、生产构建与测试。
-- `main` 会运行 **Launch GitHub Pages Demo**；也可以从 GitHub Actions 手动运行。
-- 免费 Demo 发布到 `https://jackzhang0925.github.io/Career_Pilot/`，不需要 Cloudflare、部署 Token 或付费服务。
-- 首次使用时只需在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
-- Pages 是纯静态演示：本地简历解析、LinkedIn 用户导入评分、队列、职业教练本地模式和路线图可用；实时职位 API、OpenAI 服务端调用和本地 API Key 窗口不在公开 Demo 中运行。
+- `live-demo/` 保存可直接展示的静态构建；推送到公开 GitHub 仓库后由 GitHack 免费提供正确的 HTML、CSS 和 JavaScript Content-Type。
+- Demo 地址为 `https://raw.githack.com/jackzhang0925/Career_Pilot/main/live-demo/index.html`，不需要启用 GitHub Pages，不需要部署 Token，也不需要付费服务。
+- `main` 会运行 **Validate GitHub-hosted Demo**，确认源码测试通过并且提交的静态 Demo 没有过期。
+- 静态 Demo 支持本地简历解析、LinkedIn 用户导入评分、队列、职业教练本地模式和路线图；实时职位 API、OpenAI 服务端调用和本地 API Key 窗口不在公开 Demo 中运行。
 
 完整配置和分支保护建议见 [部署文档](docs/DEPLOYMENT.md)，逐项验收结果见 [验证清单](docs/VALIDATION.md)，版本变化见 [CHANGELOG.md](CHANGELOG.md)。
 
@@ -97,6 +97,6 @@ git status --short
 
 确认 `.env.local` 不存在或已被忽略，并检查暂存内容中没有任何 `sk-...` 密钥。
 
-仓库包含 GitHub Actions CI/CD 和免费的 Pages Demo 发布。项目采用 [MIT License](LICENSE)。
+仓库包含 GitHub Actions CI/CD 和零配置静态 Demo 验证。项目采用 [MIT License](LICENSE)。
 
 更完整的模块边界见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
